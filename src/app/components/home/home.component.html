@@ -26,7 +26,7 @@
         <h3>We couldn't find any Pokemon with the name provided.</h3>
     </div>
 </div>
-<div *ngIf="pokemonList.length > 20" class="d-flex justify-content-center paginator">
+<div *ngIf="pokemonList.length > 19" class="d-flex justify-content-center paginator">
     <ngb-pagination
       [collectionSize]="pokemonCount" 
       [(page)]="currentPage" 
