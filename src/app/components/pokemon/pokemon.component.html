@@ -1,0 +1,66 @@
+<div class="container-md">
+    <div *ngIf="isLoading" class="d-flex justify-content-center">
+        <div class="spinner-grow text-warning" role="status">
+        </div>
+    </div>
+    <div *ngIf="!isLoading" class="row">
+        <h2 class="text-center">
+            {{ pokemon.displayName }}
+        </h2>
+    </div>
+    <div *ngIf="!isLoading" class="row">
+        <div class="col-3 text-center">
+            <img [src]="pokemon?.imageUrl" [alt]="pokemon?.name" class="img-fluid">
+        </div>
+        <div class="col-3">
+            <h5>Characteristics:</h5>
+            <ul>
+                <li><b>XP: </b>{{ pokemon?.exp }}</li>
+                <li><b>Height: </b>{{ pokemon?.height }}m</li>
+                <li><b>Weight: </b>{{ pokemon?.weight }}Kg</li>
+            </ul>
+        </div>
+        <div class="col-3">
+            <h5>Abilities:</h5>
+            <ul>
+                <li *ngFor="let ability of pokemon?.abilities">
+                    {{ ability }}
+                </li>
+            </ul>
+        </div>
+        <div class="col-3">
+            <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMoves" aria-expanded="false" aria-controls="collapseMoves">
+                Pokemon Moves
+            </button>
+            <div class="collapse" id="collapseMoves">
+                <div class="card card-body moves-collapsible">
+                    <ul>
+                        <li *ngFor="let move of pokemon?.moves">
+                            {{ move }}
+                        </li>
+                    </ul>
+                </div>
+              </div>            
+        </div>
+    </div>
+    <div *ngIf="!isLoading" class="row justify-content-center">
+        
+        <div class="text-center" *ngIf="!evolutions.length">
+            <p>This Pokemon doesn't have evolutions</p>
+        </div>
+        <div *ngIf="!!evolutions.length" class="col-9 evolutions-container">
+            <h5 class="text-center">Evolutions</h5>
+            <div class="row">
+                <div *ngFor="let evolution of evolutions" class="col text-center">
+                    <img [src]="evolution.imageUrl" 
+                        [alt]="evolution.name" 
+                        class="img-fluid clickable"
+                        (click)="onEvolutionClick( evolution )">
+                    <h5 class="">{{ evolution.displayName }}</h5>
+                </div>
+            </div>
+            
+        </div>
+        
+    </div>
+</div>

@@ -1,1 +1,28 @@
 /* You can add global styles to this file, and also import other style files */
+/* Importing Bootstrap SCSS file. */
+@import '~bootstrap/scss/bootstrap';
+
+$font-primary: 'Poppins', Arial, sans-serif;
+
+body {
+    background-color: #1d232a;
+}
+
+h1, h2, h3, h4, h5 {
+    color: white;
+    font-weight: 700;
+    font-family: $font-primary;
+    line-height: 1.5;
+}
+
+li {
+    color: white;
+}
+
+p {
+    color: white;
+}
+
+.clickable {
+    cursor: pointer;
+}

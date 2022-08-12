@@ -1,0 +1,40 @@
+<div class="container text-center">
+    <form class="searchform row g-3">
+        <div class="form-group d-flex col-auto">
+            <input class="form-control"  
+                   type="text"
+                   placeholder="Search Pokemon by name" 
+                   #searchText>
+            <button placeholder="" (click)="submitText(searchText.value)" class="form-control search" type="submit"><fa-icon [icon]="faSearch"></fa-icon></button>
+
+        </div>
+    </form>
+    <div *ngIf="isLoading" class="d-flex justify-content-center">
+        <div class="spinner-grow text-warning" role="status">
+        </div>
+    </div>
+    <div *ngIf="!isLoading && !!pokemonList.length" class="row">
+        <div class="col-md-3" *ngFor="let pokemon of pokemonList">
+            <img [src]="pokemon.imageUrl" 
+                 [alt]="pokemon.name" 
+                 class="img-fluid clickable"
+                 (click)="onPokemonClick( pokemon )">
+            <h3 class="ml-2"> {{ pokemon.displayName }}</h3>
+        </div>
+    </div>
+    <div *ngIf="!isLoading && !pokemonList.length && !!text.length" class="row">
+        <h3>We couldn't find any Pokemon with the name provided.</h3>
+    </div>
+</div>
+<div *ngIf="pokemonList.length > 20" class="d-flex justify-content-center paginator">
+    <ngb-pagination
+      [collectionSize]="pokemonCount" 
+      [(page)]="currentPage" 
+      [pageSize]="20"
+      [maxSize]="5"
+      (pageChange)="changePage($event)" 
+      [rotate]="true" 
+      [ellipses]="false"
+      >
+    </ngb-pagination>
+</div>
