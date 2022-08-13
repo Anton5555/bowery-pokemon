@@ -8,39 +8,31 @@
             {{ pokemon.displayName }}
         </h2>
     </div>
-    <div *ngIf="!isLoading" class="row">
-        <div class="col-3 text-center">
-            <img [src]="pokemon?.imageUrl" [alt]="pokemon?.name" class="img-fluid">
-        </div>
-        <div class="col-3">
-            <h5>Characteristics:</h5>
-            <ul>
-                <li><b>XP: </b>{{ pokemon?.exp }}</li>
-                <li><b>Height: </b>{{ pokemon?.height }}m</li>
-                <li><b>Weight: </b>{{ pokemon?.weight }}Kg</li>
-            </ul>
-        </div>
-        <div class="col-3">
-            <h5>Abilities:</h5>
-            <ul>
-                <li *ngFor="let ability of pokemon?.abilities">
-                    {{ ability }}
-                </li>
-            </ul>
-        </div>
-        <div class="col-3">
-            <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMoves" aria-expanded="false" aria-controls="collapseMoves">
-                Pokemon Moves
-            </button>
-            <div class="collapse" id="collapseMoves">
-                <div class="card card-body moves-collapsible">
-                    <ul>
-                        <li *ngFor="let move of pokemon?.moves">
-                            {{ move }}
+    <div *ngIf="!isLoading" class="row justify-content-center pokemon-details">
+        <div class="col-9">
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <img [src]="pokemon?.imageUrl" [alt]="pokemon?.name" class="img-fluid">
+                </div>
+                <div class="col-md-4">
+                    <h5>Characteristics:</h5>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item list-item"><b>XP: </b>{{ pokemon?.exp }}</li>
+                        <li class="list-group-item list-item"><b>Height: </b>{{ pokemon?.height }}m</li>
+                        <li class="list-group-item list-item"><b>Weight: </b>{{ pokemon?.weight }}Kg</li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Abilities:</h5>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item list-item" *ngFor="let ability of pokemon?.abilities">
+                            {{ ability }}
                         </li>
                     </ul>
                 </div>
-              </div>            
+
+            </div>
+
         </div>
     </div>
     <div *ngIf="!isLoading" class="row justify-content-center">
@@ -63,4 +55,21 @@
         </div>
         
     </div>
+    <div *ngIf="!isLoading" class="row justify-content-center moves-collapse-button">
+        <div class="col-3 text-center">
+            <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMoves" aria-expanded="false" aria-controls="collapseMoves">
+                Pokemon Moves
+            </button>
+            <div class="collapse" id="collapseMoves">
+                <div class="card card-body moves-collapsible">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item list-item" *ngFor="let move of pokemon?.moves">
+                            {{ move }}
+                        </li>
+                    </ul>
+                </div>
+            </div>            
+        </div>
+    </div>
 </div>
+
