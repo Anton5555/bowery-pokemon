@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
 import { PokemonService } from 'src/app/services/pokemon.service';
 import { Evolution, PokemonDetails } from 'src/app/shared/interfaces';
+import { faArrowDown, faArrowUp } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-pokemon',
@@ -13,6 +15,8 @@ export class PokemonComponent implements OnInit {
   public pokemon!: PokemonDetails;
   public evolutions: Evolution[] = [];
   public isLoading = false;
+  public faArrowDown = faArrowDown;
+  public faArrowUp = faArrowUp;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -62,15 +66,14 @@ export class PokemonComponent implements OnInit {
     )
   }
 
-  getEvolutions(evolutionChain: any) {
-    this.pokemonService.getDetails(evolutionChain.species.name).subscribe(details => {
-      this.evolutions.push({
-        name: evolutionChain.species.name,
-        displayName: evolutionChain.species.name[0].toUpperCase() + evolutionChain.species.name.substring(1),
-        imageUrl: details.sprites.front_default,
-        minLevel: !evolutionChain.evolution_details?.length ? 1 : evolutionChain.evolution_details[0].min_level,
-        trigger: !evolutionChain.evolution_details?.length ? null : evolutionChain.evolution_details[0].trigger.name,
-      });      
+  async getEvolutions(evolutionChain: any) {
+    const details = await firstValueFrom(this.pokemonService.getDetails(evolutionChain.species.name))
+    this.evolutions.push({
+      name: evolutionChain.species.name,
+      displayName: evolutionChain.species.name[0].toUpperCase() + evolutionChain.species.name.substring(1),
+      imageUrl: details.sprites.front_default,
+      minLevel: !evolutionChain.evolution_details?.length ? 1 : evolutionChain.evolution_details[0].min_level,
+      trigger: !evolutionChain.evolution_details?.length ? null : evolutionChain.evolution_details[0].trigger.name,
     })
     if (evolutionChain.evolves_to?.length > 0) {
       this.getEvolutions(evolutionChain.evolves_to[0]);

@@ -48,7 +48,14 @@
                         [alt]="evolution.name" 
                         class="img-fluid clickable"
                         (click)="onEvolutionClick( evolution )">
-                    <h5 class="">{{ evolution.displayName }}</h5>
+                    <h5>{{ evolution.displayName }}</h5>
+                    <small>
+                        Level: {{ evolution.minLevel }} 
+                        <fa-icon class="arrow-icon fa-solid" *ngIf="evolution.trigger === 'level-up'" [icon]="faArrowUp">
+                        </fa-icon>
+                        <fa-icon class="arrow-icon fa-solid" *ngIf="evolution.trigger === 'level-down'" [icon]="faArrowDown">  
+                        </fa-icon>
+                    </small>
                 </div>
             </div>
             

@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { filter, fromEvent, Subscription } from 'rxjs';
+import { filter, firstValueFrom, fromEvent, Subscription } from 'rxjs';
 import { debounceTime, map, distinctUntilChanged} from 'rxjs/operators';
 import { PokemonService } from 'src/app/services/pokemon.service';
 import { SearchService } from 'src/app/services/search.service';
@@ -41,8 +41,7 @@ export class HomeComponent implements OnInit {
       })
       ,debounceTime(1000)
       ,distinctUntilChanged()
-    ).subscribe(async (text: string) => {
-            
+    ).subscribe(async (text: string) => {    
       this.searchService.changeText(text.toLowerCase());
 
       if (!!text.length) {
@@ -57,25 +56,22 @@ export class HomeComponent implements OnInit {
 
   getPokemonList(offset: number) {
     this.isLoading = true;
-    this.pokemonService.getPaginatedPokemons(`${this.url}${offset}&limit=20`).subscribe(response => {
+    this.pokemonService.getPaginatedPokemons(`${this.url}${offset}&limit=20`).subscribe(async response => {
       if (this.pokemonCount === 0) {
         this.pokemonCount = response.count;
       }
     
       this.pokemonList = [];
-      response.results.forEach((pokemon : {name: string, url: string}) => {
-        this.pokemonService.getDetails(pokemon.name).subscribe({
-          next: (details) => {
-          this.pokemonList.push({
-            name: pokemon.name,
-            displayName: pokemon.name[0].toUpperCase() + pokemon.name.substring(1),
-            imageUrl: details.sprites.front_default,
-          });
-        },
-        complete: () => {
-          this.isLoading = false;
-        }})
-      });
+      for (const pokemon of response.results) {
+        const details = await firstValueFrom(this.pokemonService.getDetails(pokemon.name));
+
+        this.pokemonList.push({
+          name: details.name,
+          displayName: details.name[0].toUpperCase() + details.name.substring(1),
+          imageUrl: details.sprites.front_default,
+        });
+      }
+      this.isLoading = false;
     })
   }
 
@@ -83,13 +79,17 @@ export class HomeComponent implements OnInit {
     this.isLoading = true;
     this.pokemonCount = 0;
     this.pokemonList = [];
-    this.pokemonService.getDetails(text).subscribe(details => {
+    const details = await firstValueFrom(this.pokemonService.getDetails(text))
+      .catch((error) => {
+        console.log(error);
+        this.isLoading = false
+      });
+
       this.pokemonList.push({
         name: details.name,
         displayName: details.name[0].toUpperCase() + details.name.substring(1),
         imageUrl: details.sprites.front_default,
-      });
-    })
+      }); 
     this.isLoading = false;
   }
 
